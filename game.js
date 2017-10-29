@@ -49,6 +49,7 @@ draw = function(food,pet){
         let sW = 32.3, sH = 32.3;
         let clipY = sH;
         pets.forEach((pet) => {
+<<<<<<< HEAD
           
             pet.move();
             pet.x -= parseFloat(pet.vecX);
@@ -62,16 +63,31 @@ draw = function(food,pet){
             if (pet.vecY < 0 ) {
                 ctx.rotate(90*Math.PI/180);
             }
+=======
+            let pastX = 0;
+            pet.move();
+            pet.x -= parseFloat(pet.vecX);
+            pet.y -= parseFloat(pet.vecY);
+>>>>>>> f868ef43d529fc19afc9332debd9caeac7cb4cdb
             ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
             
             if (pet.egging) {
                 ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
             }
+<<<<<<< HEAD
             ctx.rotate(-(90*Math.PI/180));
                    
         });
         cycle = (cycle+1) % 4;
 	}, 60);
+=======
+            pastX = pet.x;
+            
+          
+        });
+        cycle = (cycle+1) % 4;
+	}, 100);
+>>>>>>> f868ef43d529fc19afc9332debd9caeac7cb4cdb
 }
 
 // start game
@@ -80,6 +96,7 @@ function play() {
     var food = new Food();
     var myPet = new Pet(0,0,food);
     pets.push(myPet);
+<<<<<<< HEAD
 
     //check mouse movement
     canvas.addEventListener("mousemove",function(evt){
@@ -104,3 +121,22 @@ play();
 
 
 
+=======
+
+    //check mouse movement
+    canvas.addEventListener("mousemove",function(evt){
+        food.updPos(canvas,evt);
+    });
+
+    canvas.addEventListener("keydown", function(e) {
+        gameOn = false;
+    });
+
+    //re-draw the game
+    draw(food,pets);
+    
+}
+
+
+play();
+>>>>>>> f868ef43d529fc19afc9332debd9caeac7cb4cdb
