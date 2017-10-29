@@ -25,7 +25,10 @@ function Pet(initx, inity, initfood) {
 		//if atWall -> move to food, no longer at wall 
                 
         //if has reached a wall, stop, re-coordinate . 
-        if ( this.x <= 0 || this.y <= 0 || this.x >= 695 || this.y >= 595 ){
+        let comp = 50; // compensation for right/bottom wall
+        let canvasW = 700;
+        let canvasH = 600;
+        if ( this.x <= 0 || this.y <= 0 || this.x >= (canvasW-comp) || this.y >= (canvasH-comp) ){
             //get coordinate
 			this.foodX = this.food.getX();
 			this.foodY = this.food.getY();
