@@ -7,6 +7,7 @@ let ctx = canvas.getContext("2d");
 //manage all instances of pets
 let pets = [];
 
+let gameOn = true;
 //2**************************************************2
 //create classes, functions 
 
@@ -14,62 +15,77 @@ clear = function(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
+let cycle = 0;
 draw = function(food,pet){
     let timer = 0 ;
 	this.interval = setInterval(()=>{
         timer+=0.04
 		clear();
 		//food
-        //hp 
+        //hp status
 		ctx.beginPath();
+        ctx.font = "13px Arial bold";
+        ctx.fillStyle = "green";
+        ctx.fillText(food.getHp(),food.getX()+5,food.getY()+23);
         ctx.font = "25px Arial";
-		ctx.fillText(food.getHp(),20,20);
         ctx.fillText(Math.floor(timer),20,40);
-		ctx.fill();
-        //object
-        ctx.beginPath();
-        ctx.filStyle="blue";
-        ctx.arc(food.getX(),food.getY(),20,0,2*Math.PI);
-        ctx.fill();
+        
+        
+        // bone (cursor)
+        let bone = new Image();
+        bone.src = "bone.png";
+        bone.onload = function() {
+            ctx.drawImage(bone, food.getX()-20, food.getY()-20, 50, 50);
+        }
 		
 		if (food.isStuck){
 			//draw image of food stuck
-		}
+        }
+        
+        // pet
+        let dog = new Image();
+        dog.src = "dogss.png";
+    
+        let sW = 32.3, sH = 32.3;
+        let clipY = sH;
         pets.forEach((pet) => {
+            let pastX = 0;
             pet.move();
             pet.x -= parseFloat(pet.vecX);
             pet.y -= parseFloat(pet.vecY);
-            ctx.beginPath();
-            ctx.fillStyle="purple";
-            ctx.lineWidth=0.00005;
-            ctx.beginPath();
-            ctx.arc(pet.x,pet.y,20*pet.form,0,2*Math.PI);
-            ctx.stroke();
-            ctx.fill();
-
-            if (pet.egging) {
-                ctx.fillStyle="purple";
-                ctx.beginPath();
-                ctx.arc(pet.x,pet.y,20*pet.form,0,2*Math.PI);
-                ctx.fill();
-            }
-        });
+            ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
             
-	}, 40);
+            if (pet.egging) {
+                ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
+            }
+            pastX = pet.x;
+            
+          
+        });
+        cycle = (cycle+1) % 4;
+	}, 100);
 }
 
-//3******************************************************3
-//starting the game 
+// start game
+function play() {
+    //init objects
+    var food = new Food();
+    var myPet = new Pet(0,0,food);
+    pets.push(myPet);
 
-//init objects
-var food = new Food();
-var myPet = new Pet(0,0,food);
-pets.push(myPet);
+    //check mouse movement
+    canvas.addEventListener("mousemove",function(evt){
+        food.updPos(canvas,evt);
+    });
 
-//check mouse movement
-canvas.addEventListener("mousemove",function(evt){
-	food.updPos(canvas,evt);
-});
+    canvas.addEventListener("keydown", function(e) {
+        gameOn = false;
+    });
 
-//re-draw the game
-draw(food,pets);
+    //re-draw the game
+    draw(food,pets);
+    
+}
+
+
+play();
