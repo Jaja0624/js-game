@@ -14,7 +14,7 @@ function Food(){
         let rect = canvas.getBoundingClientRect();
 		this.x = evt.clientX - rect.left;
 		this.y = evt.clientY - rect.top;
-        console.log(this.x+"  "+this.y);
+       // console.log(this.x+"  "+this.y);
     }
 
 	this.getX = function(){

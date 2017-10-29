@@ -15,25 +15,35 @@ clear = function(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
+let bone = new Image();
+// bone.src below
+
+let dog = new Image();
+dog.src = "dogss.png";
+
+let bg = new Image();
+bg.src = "back.jpeg";
+
 let cycle = 0;
 draw = function(food,pet){
     let timer = 0 ;
 	this.interval = setInterval(()=>{
         timer+=0.04
-		clear();
+        clear();
+        ctx.drawImage(bg,0,0,canvas.width,canvas.height); 
+        
 		//food
         //hp status
 		ctx.beginPath();
-        ctx.font = "13px Arial bold";
-        ctx.fillStyle = "green";
-        ctx.fillText(food.getHp(),food.getX()+5,food.getY()+23);
+        ctx.font = "15px Arial bold";
+        ctx.fillStyle = 'rgb(102, 255, 51)';
+       
+        ctx.fillText(food.getHp(),food.getX()+8,food.getY()+25);
         ctx.font = "25px Arial";
-        ctx.fillText(Math.floor(timer),20,40);
-        
-        
-        // bone (cursor)
-        let bone = new Image();
-        bone.src = "bone.png";
+        ctx.fillText(Math.floor(timer),20,40);    
+
+        // bone (cursor)    
+        bone.src = "bone.png"; // idk why but this needs to be here else bone will not load
         bone.onload = function() {
             ctx.drawImage(bone, food.getX()-20, food.getY()-20, 50, 50);
         }
@@ -43,13 +53,9 @@ draw = function(food,pet){
         }
         
         // pet
-        let dog = new Image();
-        dog.src = "dogss.png";
-    
         let sW = 32.3, sH = 32.3;
         let clipY = sH;
         pets.forEach((pet) => {
-<<<<<<< HEAD
           
             pet.move();
             pet.x -= parseFloat(pet.vecX);
@@ -59,35 +65,17 @@ draw = function(food,pet){
             } else {
                 clipY = 32.3*3;
             }
-            
-            if (pet.vecY < 0 ) {
-                ctx.rotate(90*Math.PI/180);
-            }
-=======
-            let pastX = 0;
-            pet.move();
-            pet.x -= parseFloat(pet.vecX);
-            pet.y -= parseFloat(pet.vecY);
->>>>>>> f868ef43d529fc19afc9332debd9caeac7cb4cdb
+            ctx.shadowColor = "yellow";
+            ctx.shadowBlur = 20;
             ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
             
             if (pet.egging) {
+                ctx.shadowColor = "yellow";
                 ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
             }
-<<<<<<< HEAD
-            ctx.rotate(-(90*Math.PI/180));
-                   
         });
         cycle = (cycle+1) % 4;
 	}, 60);
-=======
-            pastX = pet.x;
-            
-          
-        });
-        cycle = (cycle+1) % 4;
-	}, 100);
->>>>>>> f868ef43d529fc19afc9332debd9caeac7cb4cdb
 }
 
 // start game
@@ -96,47 +84,26 @@ function play() {
     var food = new Food();
     var myPet = new Pet(0,0,food);
     pets.push(myPet);
-<<<<<<< HEAD
 
     //check mouse movement
     canvas.addEventListener("mousemove",function(evt){
         food.updPos(canvas,evt);
     });
 
-    canvas.addEventListener("keydown", function(e) {
-        gameOn = false;
-    });
-
     //re-draw the game
     draw(food,pets);
-    console.log(gameOn);
+  
     
+}
+console.log(gameOn);
+if (gameOn) {
+    play();
 }
 
 
-play();
 
 
 
 
 
 
-=======
-
-    //check mouse movement
-    canvas.addEventListener("mousemove",function(evt){
-        food.updPos(canvas,evt);
-    });
-
-    canvas.addEventListener("keydown", function(e) {
-        gameOn = false;
-    });
-
-    //re-draw the game
-    draw(food,pets);
-    
-}
-
-
-play();
->>>>>>> f868ef43d529fc19afc9332debd9caeac7cb4cdb

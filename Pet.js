@@ -55,7 +55,7 @@ function Pet(initx, inity, initfood) {
         let x_dis = Math.abs(this.x-this.food.getX());
         let y_dis = Math.abs(this.y-this.food.getY());
         if ( (10+this.form*20) > Math.sqrt((x_dis*x_dis) + (y_dis*y_dis))) {
-            console.log("hit it !!!! : ");
+           // console.log("hit it !!!! : ");
             
             if (( this.food.hp % 5) == 0 ) { 
                 this.layEgg();
@@ -75,7 +75,7 @@ function Pet(initx, inity, initfood) {
 
 	// lay egg : 
 	this.layEgg = function(){
-		console.log("laid an egg");
+		//console.log("laid an egg");
         miniPet = new Pet(0,0,this.food);
         pets.push(miniPet);
         this.egging = false;
