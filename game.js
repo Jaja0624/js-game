@@ -16,7 +16,7 @@ clear = function(){
 }
 
 let bone = new Image();
-// bone.src below
+bone.src = "bone.png"; 
 
 let dog = new Image();
 dog.src = "dogss.png";
@@ -41,15 +41,12 @@ draw = function(food,pet){
         ctx.fillText(food.getHp(),food.getX()+8,food.getY()+25);
         ctx.font = "25px Arial";
         ctx.fillText(Math.floor(timer),20,40);    
-
-        // bone (cursor)    
-        bone.src = "bone.png"; // idk why but this needs to be here else bone will not load
-        bone.onload = function() {
-            ctx.drawImage(bone, food.getX()-20, food.getY()-20, 50, 50);
-        }
+	
+	// bone draw
+        ctx.drawImage(bone, food.getX()-20, food.getY()-20, 50, 50);
 		
-		if (food.isStuck){
-			//draw image of food stuck
+	if (food.isStuck){
+	//draw image of food stuck
         }
         
         // pet
