@@ -29,3 +29,5 @@ Nov-16th :
 
 	-	Added: Support : Wipe (Obstacle - Dog) or Slow Dog
 
+	-	TODO: animation, sprites, front-end
+
