@@ -25,3 +25,7 @@ Nov-15th:
 
 	-	TODO: animation, front-end for game, Pause-Start Screen
 
+Nov-16th : 
+
+	-	Added: Support : Wipe (Obstacle - Dog) or Slow Dog
+
