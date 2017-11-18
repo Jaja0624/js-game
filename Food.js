@@ -4,7 +4,12 @@ function Food(){
 	this.x =800;
 	this.y =800;
 	this.hp =50;
+
+    //When Steped on Poop
 	this.isStuck = false;
+    this.TTLStuck = 0;
+    this.xStuck = 0;
+    this.yStuck = 0;
 
 	//functions :update position,  lost hp , stuck in poop , .... 
 	//******************************************************************************
@@ -34,10 +39,12 @@ function Food(){
 		this.hp--;
 	}
 
-	//stuck in poop
-	this.stuck = function(){
-		//get stuck, cant move food in 3s
-	}
+    this.stuck = function(){
+        this.x = this.xStuck;
+        this.y = this.yStuck; 
+        this.TTLStuck --;
+        if (this.TTLStuck == 0 ){
+            this.isStuck = false;
+        }
+    }
 }
-
-
