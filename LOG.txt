@@ -15,4 +15,13 @@ Problems:
       **Solution:
 
         -   update cursor position whenever checking for pet.caught()
+		-	updated Algorithm for hit detection, now everything works
+
+Nov-15th: 
+
+	-	Added Poop (Obstacle), if touched will immobilize the bone for 3 seconds 
+
+	-	Added Pause Start screen, press Space and everything pauses/starts 
+
+	-	TODO: animation, front-end for game, Pause-Start Screen
 
