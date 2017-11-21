@@ -14,8 +14,8 @@ function Poop(coorX,coorY,food){
         if (10+10 > Math.sqrt(Math.pow(x_dis,2)+Math.pow(y_dis,2))){
             //stepped 
             this.food.isStuck = true; 
-            this.food.xStuck = this.x;
-            this.food.yStuck = this.y;
+            this.food.xStuck = this.food.getX();
+            this.food.yStuck = this.food.getY()-18;
             this.food.TTLStuck = 51;
             this.TTL=0;
             return true;
@@ -23,5 +23,4 @@ function Poop(coorX,coorY,food){
             return false;
         }
     }
-    
 }

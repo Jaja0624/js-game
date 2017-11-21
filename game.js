@@ -47,7 +47,7 @@ ctx.strokeStyle=gradient;
 ctx.strokeText("DOGS FLYING IN SPACE", 100, 190);
 ctx.font = "13px Arial";
 ctx.strokeText("CPSC 1045 Jamie McKee-Scott Fall 2017", 100, 215);
-ctx.strokeText("Kien Nyugen & Jackson Situ", 100, 237);
+ctx.strokeText("Kien Nguyen & Jackson Situ", 100, 237);
 
 
 clear = function(){
@@ -57,6 +57,7 @@ clear = function(){
 
 let timer = 0;
 let score = 0;
+
 function drawHUD() {
 	// draw timer
 	ctx.beginPath();
@@ -127,12 +128,103 @@ function useSupport(type) {
 	}
 }
 
-function drawSupport(){
+function drawSupport(support){
 	ctx.beginPath();
 	ctx.fillStyle="pink";
 	ctx.arc(support.x,support.y,support.radius,0,2*Math.PI);
 	ctx.fill();
 }
+
+//*****************************************
+function doSupports(){
+	//Supports 
+	let supportRan = Math.random()*1000;
+	if (supportRan > 990){
+		supports.push(new Support(Math.random()*canvas.width,Math.random()*canvas.height,food));
+	}
+
+	//index of removable support
+	let remove = -1;
+
+	//iterate
+	supports.forEach((support,index,object) => {
+		//draw to canvas
+		drawSupport(support);
+		//create support with random property
+		support.obtained();
+		//if support is obtained
+		if (support.obtain){
+			remove = index; 
+			useSupport(support.getProperty());
+		}
+	});
+
+	//if found a supoprt blob to remove
+	if (remove != -1 ) {
+		supports.splice(remove,1);
+	}
+
+}
+
+//******************************************
+//PETS 
+function drawPets(){
+	//sprite dimensions src=""
+	let sW = 32.3, sH = 32.3;
+	let clipY = sH;
+
+	//move and draw each pet
+	pets.forEach((pet) => {
+		pet.move();
+		pet.x -= parseFloat(pet.vecX);
+		pet.y -= parseFloat(pet.vecY);
+		if (pet.vecX < 0 ) {
+			clipY = 32.3;
+		} else {
+			clipY = 32.3*3;
+		}
+		ctx.shadowColor = "yellow";
+		ctx.shadowBlur = 20;
+		ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
+		
+		if (pet.changeLight) {
+			//change shadow color when this pet has touched the bone
+			ctx.shadowColor = "yellow";
+			ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
+		}
+
+		//POOP: 
+		let poopRan = Math.random()*1000; 
+		//Spawn Poop randomly
+		if (poopRan >970) { 
+			poops.push(pet.poop());
+		}
+	});
+
+	//every 11 seconds => create one pet
+	if (timer % 5 < 0.05 ) {
+		pets.push(new Pet(0,0,food));
+	}
+}
+
+//*****************************************
+//Poops
+function drawPoops(){
+	let remove = -1;
+	poops.forEach((poop,index,object)=> {
+		drawImage(poopImg, poop.x, poop.y, poop.width, poop.height);
+		if (poop.checkStepped()) {
+			score -= 5000;
+		}
+		if (poop.TTL <= 0){
+			remove = index;
+		}
+	});
+	if (remove != -1 ) {
+		poops.splice(remove,1);
+	}
+}
+
 
 function gameOver(score, health){
 	if (health < 0) {
@@ -182,7 +274,7 @@ document.addEventListener("keypress" , function(e){
 				food.updPos(canvas,evt);
 			});
 
-            //3************************************************3
+            //************************************************
             //game Interval
 			gameInv = setInterval(()=>{
 				//timer management
@@ -191,91 +283,18 @@ document.addEventListener("keypress" , function(e){
 				
 				drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 				drawHUD();
+
 				drawFood(food.isStuck, foodImg);
 
-                //******************************************
-				//PETS 
-                //sprite dimensions src=""
-				let sW = 32.3, sH = 32.3;
-				let clipY = sH;
+				drawPets();
 
-				//move and draw each pet
-				pets.forEach((pet) => {
-					pet.move();
-					pet.x -= parseFloat(pet.vecX);
-					pet.y -= parseFloat(pet.vecY);
-					if (pet.vecX < 0 ) {
-						clipY = 32.3;
-					} else {
-						clipY = 32.3*3;
-					}
-					ctx.shadowColor = "yellow";
-					ctx.shadowBlur = 20;
-					ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
-					
-					if (pet.changeLight) {
-                        //change shadow color when this pet has touched the bone
-						ctx.shadowColor = "yellow";
-						ctx.drawImage(dog,cycle*sW, clipY, sW, sH, pet.x, pet.y, 20*pet.form+40, 20*pet.form+40);
-					}
-
-                    //POOP: 
-                    let poopRan = Math.random()*1000; 
-					//Spawn Poop randomly
-                    if (poopRan >970) { 
-                        poops.push(pet.poop());
-                    }
-				});
-
-                //every 11 seconds => create one pet
-                if (timer % 5 < 0.05 ) {
-                    pets.push(new Pet(0,0,food));
-                }
-
-                //*****************************************
-                //Poops
-                let remove = -1;
-                poops.forEach((poop,index,object)=> {
-                    drawImage(poopImg, poop.x, poop.y, poop.width, poop.height);
-                    if (poop.checkStepped()) {
-						score -= 5000;
-					}
-                    if (poop.TTL <= 0){
-                        remove = index;
-                    }
-                });
-                if (remove != -1 ) {
-					poops.splice(remove,1);
-                }
-
-                //*****************************************
-                //Supports 
-                let supportRan = Math.random()*1000;
-                if (supportRan > 990){
-                    supports.push(new Support(Math.random()*canvas.width,Math.random()*canvas.height,food));
-                }
-
-                remove = -1;
-                supports.forEach((support,index,object) => {
-					console.log(support.x+"--"+support.y+" "+support.getProperty()+"--"+support.option);
-					ctx.beginPath();
-					ctx.fillStyle="pink";
-                    ctx.arc(support.x,support.y,support.radius,0,2*Math.PI);
-					ctx.fill();
-                    //create support with random property
-                    support.obtained();
-                    if (support.obtain){
-						remove = index; 
-						useSupport(support.getProperty());
-                    }
-                });
-                if (remove != -1 ) {
-                    supports.splice(remove,1);
-                }
-
-                //*********************************************
-                //Ended Support
+				drawPoops();
                 
+				doSupports();
+                
+				//check gameover
+				gameOver(score,food.hp);
+
 				cycle = (cycle+1) % 4;
 			}, 60);
 		}

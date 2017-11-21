@@ -35,7 +35,7 @@ Nov-20th :
 
 	- 	Put some functions into functions
 	
-		TODO: Re-implement and further implement with good, useful functions
+	-	Seperates main code with functions
 	
 	-	Added a start logo/screen
 	
@@ -43,7 +43,7 @@ Nov-20th :
 		
 	-	Added score system 
 	
-		TODO: When dog collides with bone, reduce score
+	-	Done Score inrease/decrese when collision
 		
 	TODO: Find sprites for poop, supports
 	
