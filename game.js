@@ -17,24 +17,139 @@ var food = new Food();
 //for game pause, start
 let gameOn = false;
 let gameInv ;
-let timer = 0;
 let cycle = 0;
 
 //2**************************************************2
 //create classes, functions 
 
-clear = function(){
-	ctx.clearRect(0,0,canvas.width,canvas.height);
-}
-
-let bone = new Image();
-bone.src = "bone.png"; 
+// Load necessary imgs
+let foodImg = new Image();
+foodImg.src = "bone.png"; 
 
 let dog = new Image();
 dog.src = "dogss.png";
 
-let bg = new Image();
-bg.src = "back.jpeg";
+let backgroundImg = new Image();
+backgroundImg.src = "back.jpeg";
+
+ctx.font = "45px Arial";
+
+// this gradient colour is directly copied from w3schools.com
+// https://www.w3schools.com/tags/canvas_stroketext.asp
+var gradient=ctx.createLinearGradient(0,0,canvas.width,0);
+gradient.addColorStop("0","magenta");
+gradient.addColorStop("0.5","blue");
+gradient.addColorStop("1.0","red");
+ctx.strokeStyle=gradient;
+ctx.strokeText("DOGS FLYING IN SPACE", 100, 190);
+ctx.font = "13px Arial";
+ctx.strokeText("CPSC 1045 Jamie McKee-Scott Fall 2017", 100, 215);
+ctx.strokeText("Kien Nyugen & Jackson Situ", 100, 237);
+
+
+clear = function(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function drawBackground(img) {
+	ctx.drawImage(img,0,0,canvas.width,canvas.height); 
+}
+
+let timer = 0;
+let score = 0;
+function drawHUD() {
+	// draw timer
+	ctx.beginPath();
+	ctx.font = "15px Arial";
+	ctx.fillStyle = 'rgb(102, 255, 51)';
+	ctx.fillText(Math.floor(timer),20,30);    
+	ctx.fill();
+
+	// draw score
+	ctx.beginPath();
+	ctx.font = "25px Arial";
+	ctx.fillStyle = 'rgb(102, 255, 51)';
+	ctx.fillText(score,canvas.width/2-20,30);    
+	ctx.fill();
+}
+
+// Draws the food and hp status
+function drawFood(isStuck, img) {
+	ctx.beginPath();
+	ctx.font = "15px Arial bold";
+	ctx.fillStyle = 'rgb(102, 255, 51)';
+	//if food is stuck, stay still for ~3 seconds
+	if (isStuck){
+		// food draw when stuck
+		food.stuck();	
+		ctx.drawImage(img, food.xStuck-20, food.yStuck-20, 50, 50);
+		// health status
+		ctx.fillText(food.getHp(),food.xStuck+8,food.yStuck+25);
+	  } else {
+		// food draw when running
+		ctx.drawImage(img, food.getX()-20, food.getY()-20, 50, 50);
+		// health status
+		ctx.fillText(food.getHp(),food.getX()+8,food.getY()+25);
+	}
+	ctx.fill();
+}
+
+function useSupport(type) {
+	switch (type) {
+		case "wipePoops" : 
+			//automatic garbage collection is a bless
+			score += 1000*poops.length;
+			poops=[];
+			break;
+		case "wipeDogs" : 
+			//automatic garbage collection is a bless
+			score += 2500*pets.length;
+			pets=[]
+			break;
+		case "slowDogs" : 
+			pets.forEach((pet)=> {
+				score += 500*pets.length;
+				pet.speed = 15;
+			});
+			break;
+		case "restoreHP" : 
+			food.restoreHp();
+			score += 1000*poops.length;
+			poops=[];
+			break;
+		default : 
+			console.log("Error creating support");
+			break;
+	}
+}
+
+function drawSupport(){
+	ctx.beginPath();
+	ctx.fillStyle="pink";
+	ctx.arc(support.x,support.y,support.radius,0,2*Math.PI);
+	ctx.fill();
+}
+
+function gameOver(score, health){
+	if (health < 0) {
+		gameOn = false;
+		ctx.beginPath();
+		ctx.font = "25px Arial";
+		ctx.fillStyle = 'rgb(102, 255, 51)';
+		ctx.fillText("lose",canvas.width/2-20,canvas.height/2);    
+		ctx.fill();
+	} else if (score > 1000000) {
+		gameOn = false;
+		ctx.beginPath();
+		ctx.font = "25px Arial";
+		ctx.fillStyle = 'rgb(102, 255, 51)';
+		ctx.fillText("win",canvas.width/2-20,canvas.height/2);    
+		ctx.fill();
+	}
+
+}
+drawBackground(backgroundImg);
+
 
 //pause, start of game
 document.addEventListener("keypress" , function(e){
@@ -71,38 +186,14 @@ document.addEventListener("keypress" , function(e){
 				//timer management
 				timer+=0.04;
 				clear();
-				ctx.drawImage(bg,0,0,canvas.width,canvas.height); 
 				
-                //******************************************
-				//hp status
-				ctx.beginPath();
-				ctx.font = "25px Arial";
-				ctx.fillText(Math.floor(timer),20,20);    
-				ctx.fill();
-
-                //**************************************
-                //FOOD
-				ctx.beginPath();
-				ctx.font = "15px Arial bold";
-				ctx.fillStyle = 'rgb(102, 255, 51)';
-				//if food is stuck, stay still for ~3 seconds
-				if (food.isStuck){
-					// food draw when stuck
-					food.stuck();	
-					ctx.drawImage(bone, food.xStuck-20, food.yStuck-20, 50, 50);
-
-					ctx.fillText(food.getHp(),food.xStuck+8,food.yStuck+25);
-  				} else {
-					// food draw when running
-					ctx.drawImage(bone, food.getX()-20, food.getY()-20, 50, 50);
-
-					ctx.fillText(food.getHp(),food.getX()+8,food.getY()+25);
-				}
-				ctx.fill();
+				drawBackground(backgroundImg);
+				drawHUD();
+				drawFood(food.isStuck, foodImg);
 
                 //******************************************
 				//PETS 
-                //size to draw sprites
+                //sprite dimensions src=""
 				let sW = 32.3, sH = 32.3;
 				let clipY = sH;
 
@@ -147,13 +238,15 @@ document.addEventListener("keypress" , function(e){
                     ctx.fillStyle = "brown";
                     ctx.arc(poop.x,poop.y,poop.radius,0,2*Math.PI);
                     ctx.fill();
-                    poop.checkStepped();
+                    if (poop.checkStepped()) {
+						score -= 5000;
+					}
                     if (poop.TTL <= 0){
                         remove = index;
                     }
                 });
                 if (remove != -1 ) {
-                    poops.splice(remove,1);
+					poops.splice(remove,1);
                 }
 
                 //*****************************************
@@ -173,25 +266,8 @@ document.addEventListener("keypress" , function(e){
                     //create support with random property
                     support.obtained();
                     if (support.obtain){
-                        remove = index; 
-                        switch (support.getProperty()) {
-                            case "wipePoops" : 
-                                //automatic garbage collection is a bless
-                                poops=[];
-                                break;
-                            case "wipeDogs" : 
-                                //automatic garbage collection is a bless
-                                pets=[]
-                                break;
-                            case "slowDogs" : 
-                                pets.forEach((pet)=> {
-                                    pet.speed = 15;
-                                });
-                                break;
-                            default : 
-                                console.log("Error creating support");
-                                break;
-                        }
+						remove = index; 
+						useSupport(support.getProperty());
                     }
                 });
                 if (remove != -1 ) {
@@ -206,3 +282,4 @@ document.addEventListener("keypress" , function(e){
 		}
 	}
 });
+

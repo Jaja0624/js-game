@@ -31,3 +31,19 @@ Nov-16th :
 
 	-	TODO: animation, sprites, front-end
 
+Nov-20th :
+
+	- 	Put some functions into functions
+	
+		TODO: Re-implement and further implement with good, useful functions
+	
+	-	Added a start logo/screen
+	
+		TODO: display background img
+		
+	-	Added score system 
+	
+		TODO: When dog collides with bone, reduce score
+		
+	TODO: Find sprites for poop, supports
+	

@@ -8,10 +8,10 @@
 	@param : food : the food object to keep track of
 */
 let Support = function(x, y, food){
-	this.type = ["wipePoops","wipeDogs","slowDogs"]; 
+	this.type = ["wipePoops","wipeDogs","slowDogs", "restoreHP"]; 
 	this.x = x;
 	this.y = y;
-	this.option = Math.floor(Math.random()*3);
+	this.option = Math.floor(Math.random()*4);
 	this.food = food;
 	this.radius = 6;
 	this.obtain = false;
@@ -26,7 +26,7 @@ let Support = function(x, y, food){
         if (10+5 > Math.sqrt(Math.pow(x_dis,2)+Math.pow(y_dis,2))){
 			this.obtain = true;
         }
-    }
+	}
 }
 
 

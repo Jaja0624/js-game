@@ -17,6 +17,10 @@ function Poop(coorX,coorY,food){
             this.food.yStuck = this.y;
             this.food.TTLStuck = 51;
             this.TTL=0;
+            return true;
+        } else {
+            return false;
         }
     }
+    
 }

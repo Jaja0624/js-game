@@ -46,5 +46,9 @@ function Food(){
         if (this.TTLStuck == 0 ){
             this.isStuck = false;
         }
-    }
+	}
+
+	this.restoreHp = function() {
+		this.hp += 100;
+	}
 }
