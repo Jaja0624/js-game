@@ -31,7 +31,24 @@ dog.src = "dogss.png";
 
 let backgroundImg = new Image();
 backgroundImg.src = "back.jpeg";
-
+backgroundImg.onload = function() {
+	ctx.font = "45px Arial";
+	drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+	var gradient=ctx.createLinearGradient(0,0,canvas.width,0);
+	gradient.addColorStop("0","magenta");
+	gradient.addColorStop("0.5","blue");
+	gradient.addColorStop("1.0","red");
+	ctx.fillStyle=gradient;
+	ctx.shadowColor = "purple";
+	ctx.shadowBlur = 20;
+	ctx.fillText("DOGS FLYING IN SPACE", 100, 190);
+	ctx.font = "13px Arial";
+	ctx.shadowBlur = 0;
+	ctx.fillStyle = "white";
+	ctx.fillText("CPSC 1045 Jamie McKee-Scott Fall 2017", 100, 215);
+	ctx.fillStyle = "white";
+	ctx.fillText("Kien Nguyen & Jackson Situ", 100, 237);
+}
 let poopImg = new Image();
 poopImg.src = "poop.png";
 
@@ -39,15 +56,7 @@ ctx.font = "45px Arial";
 
 // this gradient colour is directly copied from w3schools.com
 // https://www.w3schools.com/tags/canvas_stroketext.asp
-var gradient=ctx.createLinearGradient(0,0,canvas.width,0);
-gradient.addColorStop("0","magenta");
-gradient.addColorStop("0.5","blue");
-gradient.addColorStop("1.0","red");
-ctx.strokeStyle=gradient;
-ctx.strokeText("DOGS FLYING IN SPACE", 100, 190);
-ctx.font = "13px Arial";
-ctx.strokeText("CPSC 1045 Jamie McKee-Scott Fall 2017", 100, 215);
-ctx.strokeText("Kien Nguyen & Jackson Situ", 100, 237);
+
 
 
 clear = function(){
@@ -234,6 +243,7 @@ function gameOver(score, health){
 		ctx.fillStyle = 'rgb(102, 255, 51)';
 		ctx.fillText("lose",canvas.width/2-20,canvas.height/2);    
 		ctx.fill();
+		return true;
 	} else if (score > 1000000) {
 		gameOn = false;
 		ctx.beginPath();
@@ -241,7 +251,9 @@ function gameOver(score, health){
 		ctx.fillStyle = 'rgb(102, 255, 51)';
 		ctx.fillText("win",canvas.width/2-20,canvas.height/2);    
 		ctx.fill();
+		return true;
 	}
+	return false;
 
 }
 
@@ -293,7 +305,9 @@ document.addEventListener("keypress" , function(e){
 				doSupports();
                 
 				//check gameover
-				gameOver(score,food.hp);
+				if (gameOver(score,food.hp)) {
+					document.getElementById("instruction").innerHTML="Press space anywhere to RESTART game";
+				}
 
 				cycle = (cycle+1) % 4;
 			}, 60);
