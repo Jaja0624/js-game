@@ -5,7 +5,8 @@ function Poop(coorX,coorY,food){
     this.food = food;
 	this.TTL = 166; 
 	//size : 8pixel in width and height
-	this.radius = 4; 
+    this.width = 20; 
+    this.height = 20; 
     this.checkStepped = function(){
         this.TTL--;
         let x_dis = Math.abs(this.x-this.food.getX());

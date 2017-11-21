@@ -32,6 +32,9 @@ dog.src = "dogss.png";
 let backgroundImg = new Image();
 backgroundImg.src = "back.jpeg";
 
+let poopImg = new Image();
+poopImg.src = "poop.png";
+
 ctx.font = "45px Arial";
 
 // this gradient colour is directly copied from w3schools.com
@@ -51,9 +54,6 @@ clear = function(){
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
-function drawBackground(img) {
-	ctx.drawImage(img,0,0,canvas.width,canvas.height); 
-}
 
 let timer = 0;
 let score = 0;
@@ -82,16 +82,20 @@ function drawFood(isStuck, img) {
 	if (isStuck){
 		// food draw when stuck
 		food.stuck();	
-		ctx.drawImage(img, food.xStuck-20, food.yStuck-20, 50, 50);
+		drawImage(img, food.xStuck-20, food.yStuck, 50, 50);
 		// health status
-		ctx.fillText(food.getHp(),food.xStuck+8,food.yStuck+25);
+		ctx.fillText(food.getHp(),food.xStuck+12,food.yStuck+35);
 	  } else {
 		// food draw when running
-		ctx.drawImage(img, food.getX()-20, food.getY()-20, 50, 50);
+		drawImage(img, food.getX()-20, food.getY()-20, 50, 50);
 		// health status
-		ctx.fillText(food.getHp(),food.getX()+8,food.getY()+25);
+		ctx.fillText(food.getHp(),food.getX()+12,food.getY()+25);
 	}
 	ctx.fill();
+}
+
+function drawImage(img, x, y, width, height) {
+	ctx.drawImage(img, x, y, width, height);
 }
 
 function useSupport(type) {
@@ -148,8 +152,6 @@ function gameOver(score, health){
 	}
 
 }
-drawBackground(backgroundImg);
-
 
 //pause, start of game
 document.addEventListener("keypress" , function(e){
@@ -187,7 +189,7 @@ document.addEventListener("keypress" , function(e){
 				timer+=0.04;
 				clear();
 				
-				drawBackground(backgroundImg);
+				drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 				drawHUD();
 				drawFood(food.isStuck, foodImg);
 
@@ -234,10 +236,7 @@ document.addEventListener("keypress" , function(e){
                 //Poops
                 let remove = -1;
                 poops.forEach((poop,index,object)=> {
-                    ctx.beginPath();
-                    ctx.fillStyle = "brown";
-                    ctx.arc(poop.x,poop.y,poop.radius,0,2*Math.PI);
-                    ctx.fill();
+                    drawImage(poopImg, poop.x, poop.y, poop.width, poop.height);
                     if (poop.checkStepped()) {
 						score -= 5000;
 					}
@@ -260,7 +259,7 @@ document.addEventListener("keypress" , function(e){
                 supports.forEach((support,index,object) => {
 					console.log(support.x+"--"+support.y+" "+support.getProperty()+"--"+support.option);
 					ctx.beginPath();
-                    ctx.fillStyle="pink";
+					ctx.fillStyle="pink";
                     ctx.arc(support.x,support.y,support.radius,0,2*Math.PI);
 					ctx.fill();
                     //create support with random property
