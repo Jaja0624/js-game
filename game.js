@@ -22,7 +22,6 @@ var food = new Food();
 let gameInv ;
 let cycle = 0;
 
-
 //2**************************************************2
 //create classes, functions 
 
@@ -207,6 +206,8 @@ function makeSupports(){
 // Draw dogss
 let dog = new Image();
 dog.src = "sprites/dogss.png";
+// times to cycle
+let cycleSize = 4
 function drawPets(){
 	//sprite dimensions 
 	let sW = 32.3, sH = 32.3;
@@ -372,6 +373,7 @@ function start() {
 			reset();
 		}
 
-		cycle = (cycle+1) % 4;
+		// cycle from sprite png 
+		cycle = (cycle+1) % cycleSize;
 	}, 60);
 }
