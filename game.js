@@ -125,7 +125,7 @@ function useSupport(type) {
 		case "slowDogs" : 
 			pets.forEach((pet)=> {
 				score += 500*pets.length;
-				pet.speed -= 7;
+				pet.speed = pet.speed/2;
 			});
 			break;
 		case "restoreHP" : 
@@ -347,6 +347,15 @@ function start() {
 		if (gameOver(score,food.hp)) {	
 			console.log("game over");	
 			clearInterval(gameInv);		
+			gameInv = "";
+			gameOn = true;
+			pets = [];
+			poops = [] ;
+			supports = [];
+			food = new Food();
+			score = 0;
+			timer = 0;
+			cycle = 0;
 		}
 
 		cycle = (cycle+1) % 4;
