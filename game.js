@@ -28,10 +28,10 @@ let cycle = 0;
 
 // Load necessary imgs
 let foodImg = new Image();
-foodImg.src = "bone.png"; 
+foodImg.src = "sprites/bone.png"; 
 
 let dog = new Image();
-dog.src = "dogss.png";
+dog.src = "sprites/dogss.png";
 
 let backgroundImg = new Image();
 backgroundImg.src = "back.jpeg";
@@ -140,13 +140,13 @@ function useSupport(type) {
 }
 
 let slow = new Image();
-slow.src = "slow.png";
+slow.src = "sprites/slow.png";
 
 let wipe = new Image();
-wipe.src = "wipe.png";
+wipe.src = "sprites/wipe.png";
 
 let milk = new Image();
-milk.src = "milk.png";
+milk.src = "sprites/milk.png";
 
 function drawSupport(support, type){
 	switch (type) {
@@ -244,7 +244,7 @@ function drawPets(){
 //Poops
 
 let poopImg = new Image();
-poopImg.src = "poop.png";
+poopImg.src = "sprites/poop.png";
 function drawPoops(){
 	let remove = -1;
 	poops.forEach((poop,index,object)=> {

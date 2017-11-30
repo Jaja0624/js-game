@@ -51,3 +51,5 @@ Nov-29th :
 
 	-	Did support sprites
 	
+	- 	TODO: Game over function
+	
