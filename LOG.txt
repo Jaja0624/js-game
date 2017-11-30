@@ -47,3 +47,7 @@ Nov-20th :
 		
 	TODO: Find sprites for poop, supports
 	
+Nov-29th :
+
+	-	Did support sprites
+	

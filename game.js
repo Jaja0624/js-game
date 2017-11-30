@@ -4,20 +4,24 @@ let canvas = document.getElementById("game");
 let ctx = canvas.getContext("2d");
 
 //manage all instances of pets
-let pets = [];
+let gameOn = true;
 
+
+
+let pets = [];
+	
 //manage all instances of Supports, Bombs 
 let poops = [] ;
 let supports = [];
-
+	
 //init objects
 var food = new Food();
 //Pet will be init in interval
-
+	
 //for game pause, start
-let gameOn = false;
 let gameInv ;
 let cycle = 0;
+
 
 //2**************************************************2
 //create classes, functions 
@@ -49,8 +53,6 @@ backgroundImg.onload = function() {
 	ctx.fillStyle = "white";
 	ctx.fillText("Kien Nguyen & Jackson Situ", 100, 237);
 }
-let poopImg = new Image();
-poopImg.src = "poop.png";
 
 ctx.font = "45px Arial";
 
@@ -123,7 +125,7 @@ function useSupport(type) {
 		case "slowDogs" : 
 			pets.forEach((pet)=> {
 				score += 500*pets.length;
-				pet.speed = 15;
+				pet.speed -= 7;
 			});
 			break;
 		case "restoreHP" : 
@@ -137,15 +139,37 @@ function useSupport(type) {
 	}
 }
 
-function drawSupport(support){
-	ctx.beginPath();
-	ctx.fillStyle="pink";
-	ctx.arc(support.x,support.y,support.radius,0,2*Math.PI);
-	ctx.fill();
+let slow = new Image();
+slow.src = "slow.png";
+
+let wipe = new Image();
+wipe.src = "wipe.png";
+
+let milk = new Image();
+milk.src = "milk.png";
+
+function drawSupport(support, type){
+	switch (type) {
+		case "wipePoops" : 
+			drawImage(wipe, support.x, support.y, support.width, support.height);
+			break;
+		case "wipeDogs" : 
+			drawImage(wipe, support.x, support.y, support.width, support.height);
+			break;
+		case "slowDogs" : 
+			drawImage(slow, support.x, support.y, support.width, support.height);
+			break;
+		case "restoreHP" : 
+			drawImage(milk, support.x, support.y, support.width, support.height);
+			break;
+		default : 
+			console.log("Error drawing support");
+			break;
+	}
 }
 
 //*****************************************
-function doSupports(){
+function makeSupports(){
 	//Supports 
 	let supportRan = Math.random()*1000;
 	if (supportRan > 990){
@@ -158,7 +182,7 @@ function doSupports(){
 	//iterate
 	supports.forEach((support,index,object) => {
 		//draw to canvas
-		drawSupport(support);
+		drawSupport(support, support.getProperty());
 		//create support with random property
 		support.obtained();
 		//if support is obtained
@@ -218,6 +242,9 @@ function drawPets(){
 
 //*****************************************
 //Poops
+
+let poopImg = new Image();
+poopImg.src = "poop.png";
 function drawPoops(){
 	let remove = -1;
 	poops.forEach((poop,index,object)=> {
@@ -243,6 +270,7 @@ function gameOver(score, health){
 		ctx.fillStyle = 'rgb(102, 255, 51)';
 		ctx.fillText("lose",canvas.width/2-20,canvas.height/2);    
 		ctx.fill();
+		document.getElementById("instruction").innerHTML="Press space anywhere to RESTART game";
 		return true;
 	} else if (score > 1000000) {
 		gameOn = false;
@@ -251,19 +279,19 @@ function gameOver(score, health){
 		ctx.fillStyle = 'rgb(102, 255, 51)';
 		ctx.fillText("win",canvas.width/2-20,canvas.height/2);    
 		ctx.fill();
+		document.getElementById("instruction").innerHTML="Press space anywhere to RESTART game";
 		return true;
+
 	}
 	return false;
 
 }
 
 //pause, start of game
+
 document.addEventListener("keypress" , function(e){
 	if (e.keyCode == 32){
-		//change state of game
-		gameOn = !gameOn;
-
-        //Stop the game
+		
 		if (gameInv) {
 			document.getElementById("instruction").innerHTML="Press space anywhere to START game";
 			//stop interval (Game)
@@ -287,31 +315,40 @@ document.addEventListener("keypress" , function(e){
 			});
 
             //************************************************
-            //game Interval
-			gameInv = setInterval(()=>{
-				//timer management
-				timer+=0.04;
-				clear();
-				
-				drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-				drawHUD();
-
-				drawFood(food.isStuck, foodImg);
-
-				drawPets();
-
-				drawPoops();
-                
-				doSupports();
-                
-				//check gameover
-				if (gameOver(score,food.hp)) {
-					document.getElementById("instruction").innerHTML="Press space anywhere to RESTART game";
-				}
-
-				cycle = (cycle+1) % 4;
-			}, 60);
+			//game Interval		
+			start();
 		}
 	}
 });
 
+function start() {
+	canvas.addEventListener("mousemove",function(evt){
+		//update mouse position of Bone sprite
+		food.updPos(canvas,evt);
+	});
+
+	gameInv = setInterval(()=>{
+		//timer management
+		timer+=0.04;
+		clear();
+		
+		drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+		drawHUD();
+
+		drawFood(food.isStuck, foodImg);
+
+		drawPets();
+
+		drawPoops();
+		
+		makeSupports();
+		
+		//check gameover
+		if (gameOver(score,food.hp)) {	
+			console.log("game over");	
+			clearInterval(gameInv);		
+		}
+
+		cycle = (cycle+1) % 4;
+	}, 60);
+}
