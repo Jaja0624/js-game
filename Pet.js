@@ -65,7 +65,7 @@ function Pet(initx, inity, initfood) {
             }
 
             this.food.lost();
-
+            score = (score - 100);
             if (this.age != 31){
                 this.age+=1;
             }

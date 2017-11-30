@@ -53,3 +53,5 @@ Nov-29th :
 	
 	- 	Restart function
 	
+	- 	Fixed documentation
+	
