@@ -349,30 +349,22 @@ function start() {
 		//update mouse position of Bone sprite
 		food.updPos(canvas,evt);
 	});
-
 	gameInv = setInterval(()=>{
 		//timer management
 		timer+=0.04;
 		clear(); // clear canvas 
-		
 		drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 		drawHUD(); // draw timer and score
-
 		drawFood(food.isStuck, foodImg);
-
 		drawPets();
-
 		drawPoops();
-		
 		makeSupports();
-		
 		//check gameover
 		if (gameOver(score,food.hp)) {	
 			console.log("game over");	
 			clearInterval(gameInv);		
 			reset();
 		}
-
 		// cycle from sprite png 
 		cycle = (cycle+1) % cycleSize;
 	}, 60);
